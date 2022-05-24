@@ -20,7 +20,11 @@ namespace Sistema_Facturacion.Models
         [Required]
         public double PrecioVenta { get; set; }
         [Required]
+        public string Codigo { get; set; }
+
+        [Required]
         public string Stock { get; set; }
+
 
 
         public Productos()

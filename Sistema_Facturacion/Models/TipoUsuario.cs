@@ -7,13 +7,16 @@ using System.Web;
 
 namespace Sistema_Facturacion.Models
 {
-    public class CategoriaProductos
+    public class TipoUsuario
     {
-        [DisplayName("Id Categoria ")]
-        public int IdCategoria { get; set; }
+        [DisplayName("Id Tipo Usuario")]
+        public int IdTipo { get; set; }
         [Required]
-        public string Nombre { get; set; }
-        [Required]
-        public string Descripcion { get; set; }
+        public string Tipo { get; set; }
+
+        public TipoUsuario()
+        {
+
+        }
     }
 }

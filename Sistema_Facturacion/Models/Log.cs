@@ -7,13 +7,20 @@ using System.Web;
 
 namespace Sistema_Facturacion.Models
 {
-    public class CategoriaProductos
+    public class Log
     {
-        [DisplayName("Id Categoria ")]
-        public int IdCategoria { get; set; }
-        [Required]
-        public string Nombre { get; set; }
+        [DisplayName("Id Log")]
+        public int IdLog { get; set; }
+        [DisplayName("Id Usuario")]
+        public int IdUsuario { get; set; }
         [Required]
         public string Descripcion { get; set; }
+        [Required]
+        public DateTime Fecha { get; set; }
+
+        public Log()
+        {
+
+        }
     }
 }

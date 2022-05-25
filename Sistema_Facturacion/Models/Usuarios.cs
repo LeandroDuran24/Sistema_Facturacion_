@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -28,12 +30,43 @@ namespace Sistema_Facturacion.Models
 
         public Usuarios()
         {
-
+            IdUsuario = 0;
+            Nombre = "";
+            Apellidos = "";
+            Usuario = "";
+            Clave = "";
+            FechaCreacion = DateTime.Now;
         }
 
 
         public Usuarios(int IdUsuario)
         {
+            SqlDataAdapter dataAdapter = new SqlDataAdapter("Select * from Usuarios where IdUsuario=@id", new SqlConnection());
+            dataAdapter.SelectCommand.Parameters.AddWithValue("@id", IdUsuario);
+
+            DataTable dt = ConexionDb.GetValuesInDataTable(dataAdapter);
+
+
+            if (dt.Rows.Count > 0)
+            {
+                IdUsuario = Convert.ToInt32(dt.Rows[0]["IdUsuario"]);
+                Nombre = Convert.ToString(dt.Rows[0]["Nombre"]);
+                Apellidos = Convert.ToString(dt.Rows[0]["Apellidos"]);
+                Usuario = Convert.ToString(dt.Rows[0]["Usuario"]);
+                Clave = Convert.ToString(dt.Rows[0]["Clave"]);
+                FechaCreacion = Convert.ToDateTime(dt.Rows[0]["FechaCreacion"]);
+
+                
+            }
+            else
+            {
+                IdUsuario = 0;
+                Nombre = "";
+                Apellidos = "";
+                Usuario = "";
+                Clave = "";
+                FechaCreacion = DateTime.Now;
+            }
 
         }
     }

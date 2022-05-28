@@ -1,0 +1,162 @@
+﻿@model  Sistema_Facturacion.Models.ViewModel.CUsuarioViewModel
+
+@{
+    ViewBag.Title = "Consulta de Usuarios";
+}
+
+<h2>CUsuarios</h2>
+
+<p>
+    @Html.ActionLink("Create New", "MUsuario")
+</p>
+
+
+@using (Html.BeginForm())
+{
+
+    <div class="input-group FlexWrapNoneBotonBuscar">
+        @Html.EnumDropDownListFor(model => model.criterioBusqueda, new { @class = " " })
+        <input id="stringBusqueda" name="stringBusqueda" type="text" class="inputConsultaFiltro " placeholder="Texto de Busqueda" autocomplete="off" />
+        <span class="input-group-append">
+            <button type="submit" id="btnBuscar" class="btn btn-danger"><i class="fa fa-search botonBuscar"></i>Buscar</button>
+        </span>
+    </div>
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Nombre)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Apellidos)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Usuario)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Clave)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().FechaCreacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().IdTipoUsuario)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.usuarioList)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellidos)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuario)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Clave)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaCreacion)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.IdTipoUsuario)
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Editar", new { IdUsuario = item.IdUsuario }) |
+                    @Html.ActionLink("Delete", "Eliminar", new { /* id=item.PrimaryKey */ })*@
+
+                <a href="@Url.Action("Editar","Usuarios",new { IdUsuario = item.IdUsuario})">Editar  </a>
+
+
+            </td>
+
+            <td>
+                <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarUsuario(@item.IdUsuario)">Eliminar</a>
+            </td>
+        </tr>
+    }
+
+</table>
+<!--Modal-->
+
+<div class="modal fade  text-center" id="ModalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                @*<h2 class="modal-title" id="exampleModalLabel"><strong style="color:white">Eliminar Usuario</strong></h2>*@
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">Seguro que desea borrar el Usuario?</h5>
+                <input id="IdUsuario" hidden />
+            </div>
+            <form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" id="eliminarBtn" class="btn btn-secondary">Si</button>
+                    @*<a id="eliminarBtn" class="btn btn-primary">Si</a>*@
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+
+    function EliminarUsuario(Id) {
+
+        $('#IdUsuario').val(Id) ;
+    }
+
+    $("#eliminarBtn").on('click', function () {
+
+       
+
+        $.ajax({
+            url: '/Usuarios/Eliminar',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: '{"IdUsuario":' + $('#IdUsuario').val() + '}',
+            success: function (data) {
+
+                console.log(data);
+                alert('Se elimino');
+                $('#ModalEliminar').modal('hide');
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                
+                console.log(errorThrown);
+            },
+            complete: function () {
+                window.location.href = '/Usuarios/CUsuarios/';
+            }
+
+        })
+
+    })
+
+</script>

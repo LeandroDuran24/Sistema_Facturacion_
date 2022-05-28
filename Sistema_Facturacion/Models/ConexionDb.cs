@@ -10,7 +10,7 @@ namespace Sistema_Facturacion.Models
     public class ConexionDb
     {
 
-        public static SqlConnection connectionString = new SqlConnection("Server=LEANDRODURAN\\SQLEXPRESS; DataBase=BarberShop; Integrated Security=true");
+        public static SqlConnection connectionString = new SqlConnection("Server=LEANDRODURAN\\SQLEXPRESS; DataBase=Facturacion; Integrated Security=true");
 
 
         public SqlConnection AbrirConexion()

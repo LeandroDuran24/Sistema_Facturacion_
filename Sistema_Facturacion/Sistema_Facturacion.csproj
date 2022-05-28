@@ -168,6 +168,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -185,13 +186,14 @@
     <Compile Include="Models\Productos.cs" />
     <Compile Include="Models\Proveedores.cs" />
     <Compile Include="Models\Representantes.cs" />
-    <Compile Include="Models\Sucursales.cs" />
     <Compile Include="Models\TipoUsuario.cs" />
     <Compile Include="Models\Usuarios.cs" />
     <Compile Include="Models\Utilidades.cs" />
     <Compile Include="Models\Ventas.cs" />
-    <Compile Include="Models\ViewModel\CUsuarioViewModel.cs" />
-    <Compile Include="Models\ViewModel\LogInViewModel.cs" />
+    <Compile Include="Models\ViewModel\Cliente\CClienteViewModel.cs" />
+    <Compile Include="Models\ViewModel\Usuario\CUsuarioViewModel.cs" />
+    <Compile Include="Models\ViewModel\Usuario\LogInViewModel.cs" />
+    <Compile Include="Models\ViewModel\Usuario\MUsuarioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -253,6 +255,11 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\LogIn\LogIn.cshtml" />
     <Content Include="Views\Usuarios\MUsuario.cshtml" />
+    <Content Include="Views\Usuarios\CUsuarios.cshtml" />
+    <Content Include="Views\Usuarios\Editar.cshtml" />
+    <Content Include="Views\Clientes\MCliente.cshtml" />
+    <Content Include="Views\Clientes\CClientes.cshtml" />
+    <Content Include="Views\Clientes\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

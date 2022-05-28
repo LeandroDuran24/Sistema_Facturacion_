@@ -17,39 +17,32 @@ namespace Sistema_Facturacion.Controllers
         SqlCommand cmd = new SqlCommand();
 
 
-        // GET: Usuarios
+      
         public ActionResult MUsuario()
         {
-            return View();
+            MUsuarioViewModel user = new MUsuarioViewModel();
+            return View(user);
         }
 
        
         [HttpPost]
-        public ActionResult MUsuario(Usuarios usuario)
+        public ActionResult MUsuario(MUsuarioViewModel user)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    cmd.Connection = conexion.AbrirConexion();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "InsertarUsuario";
-                    cmd.Parameters.AddWithValue("@Parametro", usuario.IdUsuario);
-                    cmd.Parameters.AddWithValue("@Nombre", usuario.Nombre);
-                    cmd.Parameters.AddWithValue("@Apellidos", usuario.Apellidos);
-                    cmd.Parameters.AddWithValue("@Usuario", usuario.Usuario);
-                    cmd.Parameters.AddWithValue("@Clave", usuario.Clave);
 
-                    cmd.ExecuteNonQuery();
-                    cmd.Parameters.Clear();
-                    conexion.CerrarConexion();
-                    return RedirectToAction("Index");
+                    user.IdTipoUsuario = user.idTipoUsuarioSelected;
+                    GuardarUsuario(user);
+                    return RedirectToAction("MUsuario");
                 }
+               
 
                 return View();
 
             }
-            catch
+            catch (Exception e)
             {
                 return View();
             }
@@ -58,32 +51,19 @@ namespace Sistema_Facturacion.Controllers
 
         public ActionResult Editar(int IdUsuario)
         {
-            LoginViewModel viewModel = new LoginViewModel();
-
-            return View(viewModel);
+            MUsuarioViewModel user = new MUsuarioViewModel(IdUsuario);
+            return View(user);
         }
 
         [HttpPost]
-        public ActionResult Editar(Usuarios usuario)
+        public ActionResult Editar(MUsuarioViewModel user)
         {
             try
             {
 
                 if(ModelState.IsValid)
                 {
-                    cmd.Connection = conexion.AbrirConexion();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "InsertarUsuario";
-                    cmd.Parameters.AddWithValue("@Parametro", usuario.IdUsuario);
-                    cmd.Parameters.AddWithValue("@Nombre", usuario.Nombre);
-                    cmd.Parameters.AddWithValue("@Apellidos", usuario.Apellidos);
-                    cmd.Parameters.AddWithValue("@Usuario", usuario.Usuario);
-                    cmd.Parameters.AddWithValue("@Clave", usuario.Clave);
-
-                    cmd.ExecuteNonQuery();
-                    cmd.Parameters.Clear();
-                    conexion.CerrarConexion();
-
+                    GuardarUsuario(user);
                     return RedirectToAction("CUsuarios");
                 }
 
@@ -100,35 +80,39 @@ namespace Sistema_Facturacion.Controllers
         }
 
 
-        public ActionResult CUsuario()
+        public ActionResult CUsuarios()
         {
-            SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdUsuario,Nombre,Apellidos,Usuario,Clave FROM Usuarios WHERE {0} like @StringBusqueda;", CUsuarioViewModel.CriterioBusqueda), new SqlConnection());
-            adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + CUsuarioViewModel.stringBusqueda + "%");
+            CUsuarioViewModel viewModel = new CUsuarioViewModel();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdUsuario,IdTipoUsuario,Nombre,Apellidos,Usuario,Clave FROM Usuarios WHERE {0} like @StringBusqueda;", viewModel.criterioBusqueda), new SqlConnection());
+            adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + viewModel.stringBusqueda + "%");
 
             DataTable dataTable = ConexionDb.GetValuesInDataTable(adapter);
 
-            CUsuarioViewModel.usuario = (from row in dataTable.AsEnumerable()
+            viewModel.usuarioList = (from row in dataTable.AsEnumerable()
                                          select ConvertUserRow(row)).ToList();
 
-            return View(CUsuarioViewModel.usuario);
+            return View(viewModel);
 
         }
 
         [HttpPost]
-        public ActionResult CUsuario(CUsuarioViewModel usuario)
+        public ActionResult CUsuarios(CUsuarioViewModel usuario)
         {
             try
             {
 
-                SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdUsuario,Nombre,Apellidos,Usuario,Clave FROM Usuarios WHERE {0} like @StringBusqueda;", CUsuarioViewModel.CriterioBusqueda), new SqlConnection());
-                adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + CUsuarioViewModel.stringBusqueda + "%");
+                CUsuarioViewModel viewModel = new CUsuarioViewModel();
+
+                SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdUsuario,IdTipoUsuario,Nombre,Apellidos,Usuario,Clave FROM Usuarios WHERE {0} like @StringBusqueda;", viewModel.criterioBusqueda), new SqlConnection());
+                adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + viewModel.stringBusqueda + "%");
 
                 DataTable dataTable = ConexionDb.GetValuesInDataTable(adapter);
 
-                CUsuarioViewModel.usuario = (from row in dataTable.AsEnumerable()
+                viewModel.usuarioList = (from row in dataTable.AsEnumerable()
                                              select ConvertUserRow(row)).ToList();
 
-                return View(CUsuarioViewModel.usuario);
+                return View(viewModel.usuarioList);
             }
             catch (Exception)
             {
@@ -138,14 +122,11 @@ namespace Sistema_Facturacion.Controllers
         }
 
 
-        public ActionResult Delete(int IdUsuario)
+        public void Eliminar(int IdUsuario)
         {
             try
             {
                 // TODO: Add insert logic here
-
-                Usuarios usuario = new Usuarios { IdUsuario = IdUsuario };
-
                     cmd.Connection = conexion.AbrirConexion();
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "EliminarUsuario";
@@ -153,18 +134,37 @@ namespace Sistema_Facturacion.Controllers
                     cmd.ExecuteNonQuery();
                     cmd.Parameters.Clear();
                     conexion.CerrarConexion();
-                    return RedirectToAction("CUsuarios");
-                
+                  
             }
-            catch
+            catch (Exception e)
             {
-                return View("Error");
+                throw e; 
             }
         }
 
 
 
         #region metodos utiles
+
+        public void GuardarUsuario(Usuarios user)
+        {
+            cmd.Connection = conexion.AbrirConexion();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "InsertarUsuario";
+            cmd.Parameters.AddWithValue("@Parametro", user.IdUsuario);
+            cmd.Parameters.AddWithValue("@IdTipoUsuario", user.IdTipoUsuario);
+            cmd.Parameters.AddWithValue("@Nombre", user.Nombre);
+            cmd.Parameters.AddWithValue("@Apellidos", user.Apellidos);
+            cmd.Parameters.AddWithValue("@Usuario", user.Usuario);
+            cmd.Parameters.AddWithValue("@Clave", user.Clave);
+
+            cmd.ExecuteNonQuery();
+            cmd.Parameters.Clear();
+            conexion.CerrarConexion();
+        }
+
+
+
         //convierte cada usuario en una fila.
         public static Usuarios ConvertUserRow(DataRow dr)
         {
@@ -175,6 +175,7 @@ namespace Sistema_Facturacion.Controllers
 
 
             usuario.IdUsuario = Convert.ToInt32(dr["IdUsuario"] ?? 0);
+            usuario.IdTipoUsuario = Convert.ToInt32(dr["IdTipoUsuario"] ?? 0);
             usuario.Nombre = Convert.ToString(dr["Nombre"] ?? 0);
             usuario.Apellidos = Convert.ToString(dr["Apellidos"] ?? 0);
             usuario.Usuario = Convert.ToString(dr["Usuario"] ?? "");

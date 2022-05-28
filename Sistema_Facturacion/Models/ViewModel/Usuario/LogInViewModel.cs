@@ -22,7 +22,7 @@ namespace Sistema_Facturacion.Models.ViewModel
 
         }
 
-        public LogInViewModel(int id) : base(id)
+        public LogInViewModel(int IdUsuario) : base(IdUsuario)
         {
 
         }

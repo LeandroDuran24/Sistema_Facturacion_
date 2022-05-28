@@ -13,5 +13,11 @@ namespace Sistema_Facturacion.Models
             Nombre,
             IdUsuario
         }
+
+        public enum CriterioBusquedaClientes
+        {
+            Nombre,
+            IdCliente
+        }
     }
 }

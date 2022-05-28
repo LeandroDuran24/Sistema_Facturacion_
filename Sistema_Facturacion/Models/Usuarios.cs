@@ -11,19 +11,27 @@ namespace Sistema_Facturacion.Models
 {
     public class Usuarios
     {
-
-
+        [Key]
         [DisplayName("Id Usuario ")]
         public int IdUsuario { get; set; }
+
+        [DisplayName("Id Tipo Usuario ")]
+        public int IdTipoUsuario { get; set; }
+
         [Required]
         public string Nombre { get; set; }
+
         [Required]
         public string Apellidos { get; set; }
+
         [Required]
         public string Usuario { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         public string Clave { get; set; }
+
+        [DisplayName("Fecha de creacion del Usuario ")]
         public DateTime FechaCreacion { get; set; }
 
 
@@ -31,6 +39,7 @@ namespace Sistema_Facturacion.Models
         public Usuarios()
         {
             IdUsuario = 0;
+            IdTipoUsuario = 0;
             Nombre = "";
             Apellidos = "";
             Usuario = "";
@@ -41,8 +50,8 @@ namespace Sistema_Facturacion.Models
 
         public Usuarios(int IdUsuario)
         {
-            SqlDataAdapter dataAdapter = new SqlDataAdapter("Select * from Usuarios where IdUsuario=@id", new SqlConnection());
-            dataAdapter.SelectCommand.Parameters.AddWithValue("@id", IdUsuario);
+            SqlDataAdapter dataAdapter = new SqlDataAdapter("Select * from Usuarios where IdUsuario=@IdUsuario", new SqlConnection());
+            dataAdapter.SelectCommand.Parameters.AddWithValue("@IdUsuario", IdUsuario);
 
             DataTable dt = ConexionDb.GetValuesInDataTable(dataAdapter);
 
@@ -50,6 +59,7 @@ namespace Sistema_Facturacion.Models
             if (dt.Rows.Count > 0)
             {
                 IdUsuario = Convert.ToInt32(dt.Rows[0]["IdUsuario"]);
+                IdTipoUsuario = Convert.ToInt32(dt.Rows[0]["IdTipoUsuario"]);
                 Nombre = Convert.ToString(dt.Rows[0]["Nombre"]);
                 Apellidos = Convert.ToString(dt.Rows[0]["Apellidos"]);
                 Usuario = Convert.ToString(dt.Rows[0]["Usuario"]);
@@ -61,6 +71,7 @@ namespace Sistema_Facturacion.Models
             else
             {
                 IdUsuario = 0;
+                IdTipoUsuario = 0;
                 Nombre = "";
                 Apellidos = "";
                 Usuario = "";

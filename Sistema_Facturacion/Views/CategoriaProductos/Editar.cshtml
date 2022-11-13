@@ -1,0 +1,134 @@
+﻿@model Sistema_Facturacion.Models.CategoriaProductos
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Mantenimiento de Categoria de Productos";
+}
+
+
+<style>
+
+    .header {
+        color: black;
+        font-size: 27px;
+        padding: 10px;
+    }
+
+
+    .form-control {
+        /*margin-bottom: 10px;*/
+        max-width: 400px;
+        height: 3vw;
+        display: inline-flex;
+    }
+
+
+    fieldset {
+        margin-top: 20vh;
+    }
+</style>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="form-horizontal">
+                <fieldset>
+                    <legend class="text-center header">Editar Categoria de Productos</legend>
+
+
+                    <div class="form-group" style="display:none">
+                       
+                            @Html.EditorFor(model => model.IdCategoria, new { htmlAttributes = new {@id="idCategoria",  @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.IdCategoria, "", new { @class = "text-danger" })
+                      
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Categoria, htmlAttributes: new { @class = "col-md-2 col-md-offset-2 text-center" })
+                        <div class="col-md-7">
+                            @Html.EditorFor(model => model.Categoria, new { htmlAttributes = new { @id = "categoria", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Categoria, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "col-md-2 col-md-offset-2 text-center" })
+                        <div class="col-md-7">
+                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "descripcion", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-8 text-center">
+                            <input type="button" id="btnEditar" value="Editar" class="btn btn-primary " />
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+
+<script type="text/javascript">
+
+
+    $('#btnEditar').on('click', function () {
+
+        var id = $('#idCategoria').val();
+        var categoria = $('#categoria').val();
+        var descripcion = $('#descripcion').val();
+
+
+        $.ajax({
+            url: '/CategoriaProductos/Editar',
+            type: 'POST',
+            data: { Id:id, Categoria: categoria, Descripcion: descripcion },
+            success: function (result) {
+
+
+                if (result) {
+                    toastr.success('Editado con Exito...!');
+                }
+                else {
+
+                    toastr.error('Error al intentar Editar...');
+
+                }
+
+
+
+          
+                $('#idCategoria').val('');
+                $('#categoria').val('');
+                $('#descripcion').val('');
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+
+                toastr.error('Se ha producido el siguient error-> ' + errorThrown);
+            }
+        });
+
+
+    })
+
+
+    </script>

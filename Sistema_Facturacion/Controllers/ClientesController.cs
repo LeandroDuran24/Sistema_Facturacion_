@@ -25,16 +25,59 @@ namespace Sistema_Facturacion.Controllers
 
        
         [HttpPost]
-        public ActionResult MCliente(Clientes cliente)
+        public ActionResult MCliente(string Nombre,string Apellidos, string Cedula, string Direccion, string Telefono, string Celular)
         {
             try
             {
+
+                Clientes cliente = new Clientes();
+                cliente.Nombre = Nombre;
+                cliente.Apellidos = Apellidos;
+                cliente.Cedula = Cedula;
+                cliente.Direccion = Direccion;
+                cliente.Telefono = Telefono;
+                cliente.Celular = Celular;
+                if (ModelState.IsValid)
+                {                 
+                    GuardarCliente(cliente);
+                    return View("MCliente");
+                }
+
+
+                return View();
+
+            }
+            catch (Exception e)
+            {
+               throw;
+            }
+        }
+
+
+        public ActionResult Editar(int IdCliente)
+        {
+            Clientes cliente = new Clientes(IdCliente);
+            return View(cliente);
+        }
+
+        [HttpPost]
+        public ActionResult Editar(int Id,string Nombre, string Apellidos, string Cedula, string Direccion, string Telefono, string Celular)
+        {
+            try
+            {
+
+                Clientes cliente = new Clientes();
+                cliente.IdCliente = Id;
+                cliente.Nombre = Nombre;
+                cliente.Apellidos = Apellidos;
+                cliente.Cedula = Cedula;
+                cliente.Direccion = Direccion;
+                cliente.Telefono = Telefono;
+                cliente.Celular = Celular;
                 if (ModelState.IsValid)
                 {
-
-                    
                     GuardarCliente(cliente);
-                    return RedirectToAction("MCliente");
+                    return View("MCliente");
                 }
 
 
@@ -48,44 +91,13 @@ namespace Sistema_Facturacion.Controllers
         }
 
 
-        public ActionResult Editar(int IdCliente)
-        {
-            Clientes cliente = new Clientes(IdCliente);
-            return View(cliente);
-        }
-
-        [HttpPost]
-        public ActionResult Editar(Clientes cliente)
-        {
-            try
-            {
-
-                if (ModelState.IsValid)
-                {
-                    GuardarCliente(cliente);
-                    return RedirectToAction("CClientes");
-                }
-
-
-                return View();
-
-
-            }
-            catch (Exception)
-            {
-
-                return View();
-            }
-        }
-
 
         public ActionResult CClientes()
         {
             CClienteViewModel viewModel = new CClienteViewModel();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdCliente,Nombre,Apellidos,Cedula,Direccion,Telefono,Celular FROM Clientes WHERE {0} like @StringBusqueda;", viewModel.criterioBusqueda), new SqlConnection());
-            adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + viewModel.stringBusqueda + "%");
-
+            SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdCliente,Nombre,Apellidos,Cedula,Direccion,Telefono,Celular FROM Clientes WHERE Estatus='A'"), new SqlConnection());
+         
             DataTable dataTable = ConexionDb.GetValuesInDataTable(adapter);
 
             viewModel.clienteList = (from row in dataTable.AsEnumerable()
@@ -96,22 +108,22 @@ namespace Sistema_Facturacion.Controllers
         }
 
         [HttpPost]
-        public ActionResult CClientes(CClienteViewModel cliente)
+        public ActionResult CClientes(CClienteViewModel viewModel)
         {
             try
             {
 
-                CClienteViewModel viewModel = new CClienteViewModel();
+               
 
-                SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdCliente,Nombre,Apellidos,Cedula,Direccion,Telefono,Celular FROM Clientes WHERE {0} like @StringBusqueda;", viewModel.criterioBusqueda), new SqlConnection());
-                adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + viewModel.stringBusqueda + "%");
+                SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdCliente,Nombre,Apellidos,Cedula,Direccion,Telefono,Celular FROM Clientes Where Estatus='A'"), new SqlConnection());
+          
 
                 DataTable dataTable = ConexionDb.GetValuesInDataTable(adapter);
 
                 viewModel.clienteList = (from row in dataTable.AsEnumerable()
                                          select ConvertClientRow(row)).ToList();
                 
-                return View(viewModel.clienteList);
+                return View(viewModel);
             }
             catch (Exception)
             {
@@ -121,7 +133,7 @@ namespace Sistema_Facturacion.Controllers
         }
 
 
-        public void Eliminar(int IdCliente)
+        public bool Eliminar(int IdCliente)
         {
             try
             {
@@ -134,10 +146,12 @@ namespace Sistema_Facturacion.Controllers
                 cmd.Parameters.Clear();
                 conexion.CerrarConexion();
 
+                return true;
+
             }
             catch (Exception e)
             {
-                throw e;
+                return false;
             }
         }
 
@@ -180,7 +194,7 @@ namespace Sistema_Facturacion.Controllers
             cliente.Cedula = Convert.ToString(dr["Cedula"] ?? 0);
             cliente.Direccion = Convert.ToString(dr["Direccion"] ?? "");
             cliente.Telefono = Convert.ToString(dr["Telefono"] ?? 0);
-            cliente.Telefono = Convert.ToString(dr["Celular"] ?? 0);
+            cliente.Celular = Convert.ToString(dr["Celular"] ?? 0);
 
 
             return cliente;

@@ -1,0 +1,416 @@
+﻿@model Sistema_Facturacion.Models.ViewModel.Producto.MInventarioViewModel
+
+@{
+    /**/
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Inventario de Productos";
+}
+
+
+<style>
+
+    .modal-body {
+        height: 70vh;
+        overflow-y: auto;
+    }
+
+    .form-control {
+        max-width: 75vw;
+    }
+
+    .input-group {
+        display: block;
+    }
+
+    .btnBuscar {
+        height: 3vw;
+    }
+
+
+    .btnAgregar {
+        padding-top: 33%;
+    }
+</style>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="form-horizontal">
+                <fieldset>
+                    <legend class="text-center ">Inventario de Productos</legend>
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+
+                            @Html.EditorFor(model => model.IdProducto, new { htmlAttributes = new { @id = "idProducto", @style = "display:none" } })
+                            @Html.ValidationMessageFor(model => model.IdProducto, "", new { @class = "text-danger" })
+
+
+                            @Html.LabelFor(model => model.Producto, htmlAttributes: new { @class = "form-label" })
+                            <div class="input-group ">
+
+                                @Html.EditorFor(model => model.Producto, new { htmlAttributes = new { @id = "producto", @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.Producto, "", new { @class = "text-danger" })
+                                <div class="input-group-btn">
+                                    <button type="button" id="btnCategoria" class="btn btn-primary " data-target="#modalProductos" data-toggle="modal"><i class="bi bi-search"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group">
+
+
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Stock, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @id = "cantidad", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="col-md-2 ">
+
+                            @Html.LabelFor(model => model.StockMinimo, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.StockMinimo, new { htmlAttributes = new { @id = "stockMinimo", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.StockMinimo, "", new { @class = "text-danger" })
+
+                        </div>
+
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Medida, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Medida, new { htmlAttributes = new { @id = "medida", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Medida, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="col-md-2  ">
+                            @Html.LabelFor(model => model.PrecioCompra, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.PrecioCompra, new { htmlAttributes = new { @id = "precioCompra", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PrecioCompra, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-2 ">
+                            @Html.LabelFor(model => model.PrecioVenta, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.PrecioVenta, new { htmlAttributes = new { @id = "precioVenta", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PrecioVenta, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        @*<div class="col-md-1">
+
+                                <div class="btnAgregar">
+
+                                    <button id="agregar" title="Agregar Productos al Inventario" class="btn btn-success btn-lg" type="button" disabled> <span class="bi bi-plus-circle-dotted "></span> </button>
+
+                                </div>
+                            </div>*@
+
+
+                    </div>
+
+                    <div style="height: 300px;overflow: scroll; ">
+
+                        <table id="tablaInventario" class="table table-bordered table-responsive" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-3 text-center">Producto</th>
+                                    <th class="col-md-1 text-center">Cantidad</th>
+                                    <th class="col-md-1 text-center">Stock </th>
+                                    <th class="col-md-1 text-center">Und. Medida</th>
+                                    <th class="col-md-1 text-center">Prec. Compra</th>
+                                    <th class="col-md-1 text-center">Prec. Venta</th>
+                                    <th class="col-xs-1 "></th>
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+
+
+
+                </fieldset>
+                <div class="form-group">
+
+                    <div class="col-md-12 text-right">
+                        <br />
+                        <button id="guardar" title="Guardar Inventario de Productos" class="btn btn-primary " type="button" disabled><span class="bi bi-save"></span> </button>
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+<!-----------------------------------------------------------------------MODAL -------------------------------------------------------------------------->
+<!--Categoria-->
+<div class="modal " id="modalProductos" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="listitem">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h2 class="modal-title " id="exampleModalLabel"><strong style="color:white">Seleccionar Producto</strong></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped nowrap table-responsive" id="tablaProductos" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Productos().IdProducto)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Productos().Descripcion)
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in new Sistema_Facturacion.Models.ViewModel.Producto.MInventarioViewModel().productoList)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdProducto)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.jqueryui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+
+    var montoStock = 0;
+
+
+    $("#precioVenta").keyup(function (event) {
+        if (event.keyCode === 13) {
+            $('#tablaInventario').removeAttr("display", "block");
+
+            var idProducto = document.getElementById("idProducto").value;
+            var producto = document.getElementById("producto").value;
+            var cantidad = document.getElementById("cantidad").value;
+            var stockMinimo = document.getElementById("stockMinimo").value;
+            var medida = document.getElementById("medida").value;
+            var precioCompra = document.getElementById("precioCompra").value;
+            var precioVenta = document.getElementById("precioVenta").value;
+
+            var fila = '<tr id="row' + i + '"><td>' + producto + '</td><td>' + cantidad + '</td><td>' + stockMinimo + '</td><td>' + medida + '</td><td>' + precioCompra + '</td><td>' + precioVenta + '</td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn-sm btn_remove"><span class="bi bi-trash"></span> </button></td></tr>'; //esto seria lo que contendria la fila
+            listaInventario.push({ IdProducto: idProducto, Stock: (parseFloat(montoStock) + parseFloat(cantidad)), StockMinimo: stockMinimo, Medida: medida, PrecioCompra: precioCompra, PrecioVenta: precioVenta });
+
+            $('#tablaInventario tr:first').after(fila);
+            document.getElementById("idProducto").value = "";
+            document.getElementById("producto").value = "";
+            document.getElementById("cantidad").value = "";
+            document.getElementById("stockMinimo").value = "";
+            document.getElementById("medida").value = "";
+            document.getElementById("precioCompra").value = "";
+            document.getElementById("precioVenta").value = "";
+            document.getElementById("btnCategoria").focus();
+
+            i++;
+
+            HabilitarBtnGuardar();
+        }
+    });
+
+
+    function HabilitarBtnAgregar() {
+
+        if ($("#idProducto").val()) {
+
+            $('#agregar').attr('disabled', false)
+
+        }
+        else {
+
+            $('#agregar').attr('disabled', true)
+        }
+
+    }
+
+    function HabilitarBtnGuardar() {
+
+
+        $('#guardar').attr('disabled', false)
+
+    }
+
+
+    $(document).ready(function () {
+        $.noConflict(true);
+        $('#tablaProductos').DataTable({
+            "info": false,
+            "bPaginate": false, //Ocultar paginación
+            "ordering": false,
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [[1, 'asc']]
+        });
+
+
+        $('#tablaProductos tbody').on('click', 'tr', function () {
+            resultado = $('#tablaProductos').DataTable().row(this).data();
+
+            $('#idProducto').val(resultado[1]);
+            $('#producto').val(resultado[2]);
+            $("#modalProductos").hide();
+            $('.modal-backdrop').remove();
+            HabilitarBtnAgregar();
+
+
+            $.ajax({
+                url: '/Productos/CProductosInventario',
+                type: 'GET',
+                dataType: "json",
+                data: { idProducto: resultado[1] },
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+
+                    montoStock = data[0].Stock;
+
+                    document.getElementById("stockMinimo").value = data[0].StockMinimo;
+                    document.getElementById("medida").value = data[0].Medida;
+                    document.getElementById("precioCompra").value = data[0].PrecioCompra;
+                    document.getElementById("precioVenta").value = data[0].PrecioVenta;
+
+
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                    toastr.error('Se ha producido el siguient error-> ' + errorThrown);
+                }
+            });
+
+
+
+
+        });
+
+
+
+    });
+
+
+
+    var i = 1; //contador para asignar id al boton que borrara la fila
+
+    var listaInventario = [];
+
+    //$('#agregar').click(function () {
+
+    //    $('#mytable').removeAttr("display", "block");
+
+    //    var idProducto = document.getElementById("idProducto").value;
+    //    var producto = document.getElementById("producto").value;
+    //    var cantidad = document.getElementById("cantidad").value;
+    //    var stockMinimo = document.getElementById("stockMinimo").value;
+    //    var medida = document.getElementById("medida").value;
+    //    var precioCompra = document.getElementById("precioCompra").value;
+    //    var precioVenta = document.getElementById("precioVenta").value;
+
+    //    var fila = '<tr id="row' + i + '"><td>' + producto + '</td><td>' + cantidad + '</td><td>' + stockMinimo + '</td><td>' + medida + '</td><td>' + precioCompra + '</td><td>' + precioVenta + '</td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove"><span class="bi bi-trash"></span> </button></td></tr>'; //esto seria lo que contendria la fila
+    //    listaInventario.push({ IdProducto: idProducto, Stock: (parseFloat(montoStock) + parseFloat(cantidad)), StockMinimo: stockMinimo, Medida: medida, PrecioCompra: precioCompra, PrecioVenta: precioVenta });
+
+    //    $('#mytable tr:first').after(fila);
+    //    document.getElementById("idProducto").value = "";
+    //    document.getElementById("producto").value = "";
+    //    document.getElementById("cantidad").value = "";
+    //    document.getElementById("stockMinimo").value = "";
+    //    document.getElementById("medida").value = "";
+    //    document.getElementById("precioCompra").value = "";
+    //    document.getElementById("precioVenta").value = "";
+    //    document.getElementById("btnCategoria").focus();
+
+    //    i++;
+
+    //    HabilitarBtnGuardar();
+    //});
+
+    $(document).on('click', '.btn_remove', function () {
+        var button_id = $(this).attr("id");
+        $('#row' + button_id + '').remove(); //borra la fila
+
+    });
+
+
+    $('#guardar').click(function () {
+
+        var valorParametros = JSON.stringify(listaInventario);
+        console.log(listaInventario);
+        $.ajax({
+            url: '/Productos/Inventario',
+            type: 'POST',
+            data: '{ "inventario":' + valorParametros + '}',
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+
+                toastr.success('Guardado con Exito...!');
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                toastr.error('Se ha producido el siguient error-> ' + errorThrown);
+                console.log(errorThrown);
+            }
+        });
+    })
+
+
+
+
+
+</script>
+
+

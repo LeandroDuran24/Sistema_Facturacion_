@@ -1,0 +1,248 @@
+﻿@model Sistema_Facturacion.Models.ViewModel.Proveedor.MProveedorViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Mantenimiento de Proveedores";
+}
+
+
+
+<style>
+    #Representante {
+        max-width: 360px;
+    }
+
+
+    .checkbox {
+        width: 25px;
+        height: 25px;
+    }
+
+    .input-group {
+        display: flex;
+    }
+
+
+    img {
+        margin-top: 15vh;
+    }
+
+    .imgResponsive {
+        width: 100%;
+        height: auto;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-horizontal">
+                <fieldset>
+                    <legend class="text-center header">Mantenimiento de Proveedores</legend>
+
+
+                    <div class="col-md-5 col-sm-4 col-lg-4">
+
+                        <img data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-perspective="500" src="~/Content/Images/proveedor.png" class="js-tilt imgResponsive" height="300" width="300">
+
+                    </div>
+
+                    <div class="col-sm-6 col-md-5 col-lg-6 col-sm-offset-1 col-md-offset-1 col-lg-offset-2">
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Representante, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.IdRepresentante, new { htmlAttributes = new { @id = "idRepresentante", @class = "form-control", @readonly = true, @style = "display:none" } })
+                            @Html.ValidationMessageFor(model => model.IdRepresentante, "", new { @class = "text-danger" })
+                            <div class="input-group">
+
+                                @Html.EditorFor(model => model.Representante, new { htmlAttributes = new { @id = "Representante", @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.Representante, "", new { @class = "text-danger" })
+                                <button type="button" id="btnRepresentante" class="btn btn-primary" data-target="#modalRepresentante" data-toggle="modal"><i class="bi bi-search"></i></button>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+                            @Html.LabelFor(model => model.RazonSocial, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.RazonSocial, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.RazonSocial, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="form-group">
+
+
+                            @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "form-label " })
+                            @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="form-group">
+
+
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="text-center">
+
+                            <button type="submit" class="btn btn-primary "> <span class=" bi bi-save"></span> Guardar</button>
+                        </div>
+
+                    </div>
+
+
+
+
+
+                </fieldset>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+}
+<!--Representantes-->
+
+<div class="modal " id="modalRepresentante" tabindex="-1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h2 class="modal-title" id="exampleModalLabel"><strong>Seleccionar Proveedor</strong></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <table class="table table-striped nowrap table-responsive" id="tablaRepresentante" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().IdRepresentante)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Representantes().Nombre)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Representantes().Apellidos)
+                            </th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in new Sistema_Facturacion.Models.ViewModel.Proveedor.MProveedorViewModel().representanteList)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdRepresentante)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nombre)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Apellidos)
+                                </td>
+
+
+
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $.noConflict(true);
+        $('#tablaRepresentante').DataTable({
+            "info": false,
+            "bPaginate": false, //Ocultar paginación
+            "ordering": false,
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [[1, 'asc']]
+        });
+
+
+        var r;
+
+        $('#tablaRepresentante tbody').on('click', 'tr', function () {
+            resultado = $('#tablaRepresentante').DataTable().row(this).data();
+            $('#idRepresentante').val(resultado[1]);
+            $('#Representante').val(resultado[2] + ' ' + resultado[3]);
+            $("#modalRepresentante").hide();
+            $('.modal-backdrop').remove();
+
+        });
+
+       
+
+
+    });
+
+</script>
+
+<script>
+    $('.js-tilt').tilt({
+        scale: 1.2
+    })
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+

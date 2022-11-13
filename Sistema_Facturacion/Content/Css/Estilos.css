@@ -1,0 +1,224 @@
+﻿/*LAYOUT*/
+body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+.main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background: #304ffe;
+    min-width: 250px;
+    max-width: 250px;
+}
+
+
+
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+
+
+
+
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-menu {
+    display: none;
+    padding: 20px;
+    background: #0d2c44;
+    color: #fff;
+}
+
+    .btn-menu .icono {
+        float: right;
+    }
+
+.contenedor-menu {
+    width: 20%;
+    min-width: 250px;
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    line-height: 18px;
+}
+
+    .contenedor-menu .menu {
+        width: 100%;
+    }
+
+    .contenedor-menu ul {
+        list-style: none;
+    }
+
+    .contenedor-menu .menu li a {
+        color: white;
+        display: block;
+        padding: 15px 20px;
+        background: #304ffe;
+        border-top:1px solid white;
+    }
+
+.contenedor-menu .menu li h4{
+    color: white;
+    display: block;
+    padding: 15px 20px;
+    background: #304ffe;
+    font-family:'Segoe UI Emoji';
+
+}
+
+        .contenedor-menu .menu li a:hover {
+            background: #1a237e;
+            color: #fff;
+        }
+
+    .contenedor-menu .menu .icono {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+        .contenedor-menu .menu .icono.izquierda {
+            float: left;
+            margin-right: 10px;
+        }
+
+        .contenedor-menu .menu .icono.derecha {
+            float: right;
+            margin-left: 10px;
+        }
+
+    .contenedor-menu .menu ul {
+        display: none;
+    }
+
+        .contenedor-menu .menu ul li a {
+            background: #424242;
+            color: #e9e9e9;
+        }
+
+
+
+
+    .contenedor-menu .menu .activado > a {
+        background: #1a95d5;
+        color: #fff;
+    }
+
+@media screen and (max-width: 450px) {
+    body {
+        padding-top: 80px;
+    }
+
+    .contenedor-menu {
+        margin: 0;
+        width: 100%;
+        height:100%;
+        position: static;
+        top: 0;
+        z-index: 1000;
+    }
+
+    /*.btn-menu {
+        display: block;
+    }*/
+
+    /*.contenedor-menu .menu {
+        display: none;
+    }*/
+}
+
+
+
+.dataTables_wrapper .dataTables_filter input {
+    max-width: 100%;
+}
+
+.dataTables_filter input {
+    width: 50vh;
+    height: 32px;
+    background: #fcfcfc;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset;
+    text-indent: 10px;
+}
+
+
+
+
+
+/*Formularios*/
+
+
+.modal-body {
+    /*height: 70vh;*/
+    overflow-y: auto;
+}
+
+.header {
+    color: black;
+    font-size: 27px;
+    font-family: 'bootstrap-icons';
+}
+
+.form-control {
+    max-width: 400px;
+    height: 2.7vw;
+    font-size: 1.5rem;
+    font-family: 'bootstrap-icons';
+    /*border:1px solid blue;*/
+    /*border-radius: 25px;*/
+}
+
+.form-label {
+    font-family: 'bootstrap-icons';
+    font-size: 2rem;
+}
+
+
+.form-group{
+
+    margin-bottom:10px;
+}
+
+
+.btnRojo {
+    color: #d50000;
+}
+
+.btnVerde {
+    color: #00e676;
+}
+
+img {
+    margin-top: 15vh;
+}
+
+
+.btn{
+
+    border-radius:0px;
+}
+
+
+.bg-primary {
+    color: white;
+    background-color: #304ffe;
+}

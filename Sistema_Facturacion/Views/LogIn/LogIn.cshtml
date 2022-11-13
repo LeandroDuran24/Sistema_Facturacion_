@@ -1,44 +1,131 @@
 ﻿@model Sistema_Facturacion.Models.ViewModel.LogInViewModel
 
 @{
+    Layout = null;
     ViewBag.Title = "Inicio de Sesion";
 }
 
+<link href="~/Content/Css/LogIn.css" rel="stylesheet" />
 
-@using (Html.BeginForm()) 
+<!--Bootsrap 4 CDN-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<!--Fontawesome CDN-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Iniciar Sesion</h4>
-        <hr />
-       
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+
+
+    @*<div class="container body-content form-horizontal col-md-12 ">
+
+            <div class="row">
+
+                <h2 class="Titulo">Bienvenido</h2>
+
+                <div class="form-group text-center">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-4">
+                        <i class="bi bi-person-circle"></i>
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @id = "usuario", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-4">
+                        <i class="bi bi-fingerprint"></i>
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @id = "clave", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-4" >
+                        <input id="LogIn" type="button" value="LogIn" class="btn btn-primary form-control" />
+                    </div>
+                </div>
             </div>
-        </div>
+        </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+
+
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Sign In</h3>
+
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @id = "usuario", @class = "form-control",@placeholder="Username" } })
+                            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @id = "clave", @class = "form-control", @placeholder="Password" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group text-center">
+                            <input id="LogIn" type="button" value="LogIn" class="btn btn-primary text-center" />
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
+
 }
 
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $("#LogIn").on('click', function () {
+
+        $.ajax({
+            url: '/LogIn/LogIn',
+            type: 'POST',
+            data: { Usuario: $('#usuario').val(), Password: $('#clave').val() },
+            success: function (data) {
+
+                console.log(data);
+                if (data == "Exito") {
+                    window.location.href = '/Home/Index/';
+                }
+
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                console.log(errorThrown);
+            }
+
+
+        })
+
+    })
+
+
+</script>
+
+

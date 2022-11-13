@@ -1,14 +1,20 @@
-﻿using Sistema_Facturacion.Models.ViewModel;
+﻿using Sistema_Facturacion.Models;
+using Sistema_Facturacion.Models.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Sistema_Facturacion.Controllers
 {
     public class LogInController : Controller
     {
+        ConexionDb conexion = new ConexionDb();
+        SqlCommand cmd = new SqlCommand();
+
         // GET: LogIn
         public ActionResult LogIn()
         {
@@ -17,17 +23,34 @@ namespace Sistema_Facturacion.Controllers
 
        
         [HttpPost]
-        public ActionResult LogIn(LogInViewModel viewModel)
+        public string LogIn(string Usuario, string Password)
         {
             try
             {
-                // TODO: Add insert logic here
+               
+                LogInViewModel login = new LogInViewModel(Usuario);
 
-                return RedirectToAction("Index");
+                if(login.Username!="")
+                {
+                    if (Password == login.Password)
+                    {
+                        FormsAuthentication.SetAuthCookie(login.Username, false);
+                        Session["usuario"] = Usuario;
+                        return "Exito";
+                    }
+                    {
+                        return "No coinciden";
+                    }
+                }
+                else
+                {
+                    return "No existe";
+                }
+                
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                return "Error";
             }
         }
 

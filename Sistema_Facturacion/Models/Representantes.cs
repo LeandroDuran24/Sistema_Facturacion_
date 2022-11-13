@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -9,28 +10,73 @@ namespace Sistema_Facturacion.Models
 {
     public class Representantes
     {
-        [DisplayName("Id Representante")]
+        [DisplayName("Id")]
         public int IdRepresentante { get; set; }
-        [DisplayName("Id Proveedor")]
-        public int IdProveedor { get; set; }
-        [Required]
+
+        [DisplayName("Representante")]
         public string Nombre { get; set; }
-        [Required]
+
+        [DisplayName("Apellidos")]
         public string Apellidos { get; set; }
-        [Required]
+
+        [DisplayName("Cedula")]
         public string Cedula { get; set; }
-        [Required]
+
+        [DisplayName("Direccion")]
         public string Direccion { get; set; }
-        [Required]
-        public string Telefono { get; set; }
-        [Required]
+    
+
+        [DisplayName("Celular")]
         public string Celular { get; set; }
-        [Required]
+
+        [DisplayName("Email")]
         public string Email { get; set; }
+
 
         public Representantes()
         {
+            IdRepresentante = 0;
+            Nombre = "";
+            Apellidos = "";
+            Cedula = "";
+            Direccion = "";
+            Celular = "";
+            Email = "";
+        }
+
+
+        public Representantes(int IdRepresentate)
+        {
+            SqlDataAdapter dataAdapter = new SqlDataAdapter("Select * from Representantes where IdRepresentante=@IdRepresentante", new SqlConnection());
+            dataAdapter.SelectCommand.Parameters.AddWithValue("@IdRepresentante", IdRepresentate);
+
+            DataTable dt = ConexionDb.GetValuesInDataTable(dataAdapter);
+
+
+            if (dt.Rows.Count > 0)
+            {
+                IdRepresentante = Convert.ToInt32(dt.Rows[0]["IdRepresentante"]);
+                Nombre = Convert.ToString(dt.Rows[0]["Nombre"]);
+                Apellidos = Convert.ToString(dt.Rows[0]["Apellidos"]);
+                Cedula = Convert.ToString(dt.Rows[0]["Cedula"]);
+                Direccion = Convert.ToString(dt.Rows[0]["Direccion"]);
+                Celular = Convert.ToString(dt.Rows[0]["Celular"]);
+                Email = Convert.ToString(dt.Rows[0]["Email"]);
+
+
+            }
+            else
+            {
+                IdRepresentate = 0;
+                Nombre = "";
+                Apellidos = "";
+                Cedula = "";
+                Celular = "";
+                Email = "";
+            }
 
         }
+
+
     }
 }

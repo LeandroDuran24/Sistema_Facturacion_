@@ -1,0 +1,170 @@
+﻿@model Sistema_Facturacion.Models.ViewModel.Proveedor.CProveedorViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Consulta de Proveedores";
+}
+
+<h2 class="text-center header">Consulta de Proveedores</h2>
+
+
+
+<table class="table table-striped nowrap table-responsive" id="tablaProveedores" style="width:100%">
+    <thead>
+
+
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().IdRepresentante)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().RazonSocial)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().Direccion)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().Telefono)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().Email)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model.proveedorList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdRepresentante)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.RazonSocial)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+
+
+            <td>
+
+
+                <a href="@Url.Action("Editar","Clientes",new { IdProveedor = item.IdProveedor})"><i class="bi bi-pencil btnVerde"></i>  </a> &nbsp;
+
+                <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarProveedor(@item.IdProveedor)"><i class="bi bi-trash3 btnRojo"></i></a>
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+
+
+
+<!--Modal-->
+
+<div class="modal fade  text-center" id="ModalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                @*<h2 class="modal-title" id="exampleModalLabel"><strong style="color:white">Eliminar Usuario</strong></h2>*@
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">Seguro que desea borrar el Proveedor?</h5>
+                <input id="IdProveedor" hidden />
+            </div>
+            <form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" id="eliminarBtn" class="btn btn-secondary">Si</button>
+                    @*<a id="eliminarBtn" class="btn btn-primary">Si</a>*@
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.jqueryui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+
+
+<script type="text/javascript">
+
+
+    function EliminarProveedor(Id) {
+
+        $('#IdProveedor').val(Id);
+    }
+
+    $("#eliminarBtn").on('click', function () {
+
+        $.ajax({
+            url: '/Proveedores/Eliminar',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: '{"IdProveedor":' + $('#IdProveedor').val() + '}',
+            success: function (data) {
+
+                console.log(data);
+                alert('Se elimino');
+                $('#ModalEliminar').modal('hide');
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                console.log(errorThrown);
+            },
+            complete: function () {
+                window.location.href = '/Proveedores/CProveedores/';
+            }
+
+        })
+
+    })
+
+    $(document).ready(function () {
+        $.noConflict();
+        $('#tablaProveedores').DataTable({
+            info: false,
+            paging: false,
+            responsive: true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            },
+            "oLanguage": {
+                "sEmptyTable": "No hay datos disponibles para mostrar"
+            }
+        });
+    });
+
+</script>

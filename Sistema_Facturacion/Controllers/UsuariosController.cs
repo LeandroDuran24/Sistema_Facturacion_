@@ -84,9 +84,8 @@ namespace Sistema_Facturacion.Controllers
         {
             CUsuarioViewModel viewModel = new CUsuarioViewModel();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdUsuario,IdTipoUsuario,Nombre,Apellidos,Usuario,Clave FROM Usuarios WHERE {0} like @StringBusqueda;", viewModel.criterioBusqueda), new SqlConnection());
-            adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + viewModel.stringBusqueda + "%");
-
+            SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdUsuario,IdTipoUsuario,Nombre,Apellidos,Usuario,Clave FROM Usuarios Where Estatus='A'"), new SqlConnection());
+           
             DataTable dataTable = ConexionDb.GetValuesInDataTable(adapter);
 
             viewModel.usuarioList = (from row in dataTable.AsEnumerable()
@@ -96,30 +95,7 @@ namespace Sistema_Facturacion.Controllers
 
         }
 
-        [HttpPost]
-        public ActionResult CUsuarios(CUsuarioViewModel usuario)
-        {
-            try
-            {
-
-                CUsuarioViewModel viewModel = new CUsuarioViewModel();
-
-                SqlDataAdapter adapter = new SqlDataAdapter(string.Format("SELECT IdUsuario,IdTipoUsuario,Nombre,Apellidos,Usuario,Clave FROM Usuarios WHERE {0} like @StringBusqueda;", viewModel.criterioBusqueda), new SqlConnection());
-                adapter.SelectCommand.Parameters.AddWithValue("@stringBusqueda", "%" + viewModel.stringBusqueda + "%");
-
-                DataTable dataTable = ConexionDb.GetValuesInDataTable(adapter);
-
-                viewModel.usuarioList = (from row in dataTable.AsEnumerable()
-                                             select ConvertUserRow(row)).ToList();
-
-                return View(viewModel.usuarioList);
-            }
-            catch (Exception)
-            {
-
-                return View();
-            }
-        }
+       
 
 
         public void Eliminar(int IdUsuario)

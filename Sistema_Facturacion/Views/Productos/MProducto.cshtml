@@ -1,0 +1,399 @@
+﻿@model Sistema_Facturacion.Models.ViewModel.Producto.MProductoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Mantenimiento de Productos";
+}
+
+<style>
+
+
+    .input-group {
+        display: flex;
+    }
+
+    img {
+        margin-top: 15vh;
+    }
+
+    .imgResponsive {
+        width: 100%;
+        height: auto;
+    }
+
+    #categoria, #proveedor {
+        max-width: 360px;
+    }
+
+
+    input[type=checkbox] {
+        position: relative;
+        cursor: pointer;
+    }
+
+        input[type=checkbox]:before {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            top: 0;
+            left: 0;
+            background-color: white;
+            border: 1px solid #304ffe;
+        }
+
+        input[type=checkbox]:checked:before {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            top: 0;
+            left: 0;
+            background-color: #304ffe;
+        }
+
+        input[type=checkbox]:checked:after {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 17px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+            position: absolute;
+            top: 2px;
+            left: 6px;
+        }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-horizontal">
+                <fieldset>
+                    <legend class="text-center header">Mantenimiento de Productos</legend>
+
+                    <div class="col-md-5 col-sm-4 col-lg-4">
+
+                        <img data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-perspective="500" src="~/Content/Images/productos.png" class="js-tilt imgResponsive" height="300" width="300">
+
+                    </div>
+
+
+                    <div class=" col-sm-6 col-md-5 col-lg-6 col-sm-offset-1 col-md-offset-1 col-lg-offset-2">
+
+                        <div class="form-group">
+
+
+                            @Html.LabelFor(model => model.IdCategoriaProducto, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.IdCategoriaProducto, new { htmlAttributes = new { @id = "idCategoria", @class = "form-control", @readonly = true, @style = "display:none" } })
+                            @Html.ValidationMessageFor(model => model.IdCategoriaProducto, "", new { @class = "text-danger" })
+
+                            <div class="input-group">
+
+                                @Html.EditorFor(model => model.Categoria, new { htmlAttributes = new { @id = "categoria", @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.IdCategoriaProducto, "", new { @class = "text-danger" })
+                                <button type="button" id="btnCategoria" class="btn btn-primary" data-target="#modalCategoria" data-toggle="modal"><i class="bi bi-search"></i></button>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.IdProveedor, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.IdProveedor, new { htmlAttributes = new { @id = "idProveedor", @class = "form-control", @readonly = true, @style = "display:none" } })
+                            @Html.ValidationMessageFor(model => model.IdProveedor, "", new { @class = "text-danger" })
+
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.RazonSocial, new { htmlAttributes = new { @id = "proveedor", @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.RazonSocial, "", new { @class = "text-danger" })
+                                <button type="button" id="btnProveedor" class="btn btn-primary" data-target="#modalProveedor" data-toggle="modal"><i class="bi bi-search"></i></button>
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @id = "descripcion", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Codigo, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @id = "codigo", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Codigo, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="form-group">
+
+
+                            @Html.LabelFor(model => model.TieneImpuesto, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.TieneImpuesto, new { htmlAttributes = new { @id = "tieneImpuesto", @class = "checkbox " } })
+                            @Html.ValidationMessageFor(model => model.TieneImpuesto, "", new { @class = "text-danger" })
+
+
+                        </div>
+
+
+
+                        <div class="text-center">
+
+                            <button type="button" id="btnGuardar" class="btn btn-primary "> <span class=" bi bi-save"></span> Guardar</button>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+<!-----------------------------------------------------------------------MODAL -------------------------------------------------------------------------->
+<!--Categoria-->
+<div class="modal " id="modalCategoria" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="listitem">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h2 class="modal-title " id="exampleModalLabel"><strong style="color:white">Seleccionar Categoria</strong></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped nowrap table-responsive" id="tablaCategoria" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.CategoriaProductos().IdCategoria)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.CategoriaProductos().Categoria)
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in new Sistema_Facturacion.Models.ViewModel.Producto.MProductoViewModel().categoriaList)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdCategoria)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Categoria)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Proveedor-->
+<div class="modal " id="modalProveedor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="listitem">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h2 class="modal-title" id="exampleModalLabel"><strong style="color:white">Seleccionar Proveedor</strong></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <table class="table table-striped nowrap table-responsive" id="tablaProveedor" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().IdProveedor)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Proveedores().RazonSocial)
+                            </th>
+
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in new Sistema_Facturacion.Models.ViewModel.Producto.MProductoViewModel().proveedorList)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdProveedor)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RazonSocial)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $.noConflict(true);
+        $('#tablaCategoria').DataTable({
+            info: false,
+            paging: true,
+            responsive: true,
+            "bLengthChange": false,
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [[1, 'asc']]
+        });
+
+
+
+        $('#tablaProveedor').DataTable({
+            info: false,
+            paging: true,
+            responsive: true,
+            "bLengthChange": false,
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [[1, 'asc']]
+        });
+
+        var r;
+
+        $('#tablaProveedor tbody').on('click', 'tr', function () {
+            resultado = $('#tablaProveedor').DataTable().row(this).data();
+
+            $('#idProveedor').val(resultado[1]);
+            $('#proveedor').val(resultado[2]);
+            $("#modalProveedor").hide();
+            $('.modal-backdrop').remove();
+
+        });
+
+        $('#tablaCategoria tbody').on('click', 'tr', function () {
+            resultado = $('#tablaCategoria').DataTable().row(this).data();
+
+            $('#idCategoria').val(resultado[1]);
+            $('#categoria').val(resultado[2]);
+            $("#modalCategoria").hide();
+            $('.modal-backdrop').remove();
+
+        });
+
+
+
+        $('#btnGuardar').on('click', function () {
+
+            var idCategoria = $('#idCategoria').val();
+            var idProveedor = $('#idProveedor').val();
+
+            var descripcion = $('#descripcion').val();
+            var codigo = $('#codigo').val();
+            var impuesto = $('#tieneImpuesto').val();
+
+            console.log(idCategoria + ' ' + idProveedor);
+
+
+            $.ajax({
+                url: '/Productos/MProducto',
+                type: 'POST',
+                data: { IdCategoria: idCategoria, IdProveedor: idProveedor, Descripcion: descripcion, Codigo: codigo, Impuesto: impuesto },
+                success: function (result) {
+
+                    if (result)
+                        toastr.success('Guardado con Exito...!');
+                    else
+                        toastr.error('Error al intentar Guardar...');
+
+                    $('#idCategoria').val('');
+                    $('#categoria').val('');
+                    $('#idProducto').val('');
+                    $('#producto').val('');
+                    $('#descripcion').val('');
+                    $('#codigo').val('');
+                    $('#tieneImpuesto').val('');
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    toastr.error('Se ha producido el siguient error-> ' + errorThrown);
+
+                }
+            });
+
+
+        })
+
+
+    });
+
+
+
+
+
+</script>
+
+

@@ -23,7 +23,7 @@ namespace Sistema_Facturacion.Models
         public string Direccion { get; set; }
        
         public string Telefono { get; set; }
-        [Required]
+     
         public string Celular { get; set; }
 
 

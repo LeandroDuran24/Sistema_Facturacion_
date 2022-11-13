@@ -1,55 +1,50 @@
 ﻿@model  Sistema_Facturacion.Models.ViewModel.CUsuarioViewModel
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Consulta de Usuarios";
 }
 
-<h2>CUsuarios</h2>
-
-<p>
-    @Html.ActionLink("Create New", "MUsuario")
-</p>
+<style>
 
 
-@using (Html.BeginForm())
-{
 
-    <div class="input-group FlexWrapNoneBotonBuscar">
-        @Html.EnumDropDownListFor(model => model.criterioBusqueda, new { @class = " " })
-        <input id="stringBusqueda" name="stringBusqueda" type="text" class="inputConsultaFiltro " placeholder="Texto de Busqueda" autocomplete="off" />
-        <span class="input-group-append">
-            <button type="submit" id="btnBuscar" class="btn btn-danger"><i class="fa fa-search botonBuscar"></i>Buscar</button>
-        </span>
-    </div>
-}
+    .ui-widget-header {
+        background-color: white;
+    }
+</style>
+
+<h2 class="text-center header ">Consulta de Usuarios</h2>
 
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Nombre)
-        </th>
+<table class="table table-striped nowrap table-responsive" id="tablaUsuarios" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Nombre)
+            </th>
 
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Apellidos)
-        </th>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Apellidos)
+            </th>
 
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Usuario)
-        </th>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Usuario)
+            </th>
 
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Clave)
-        </th>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().Clave)
+            </th>
 
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().FechaCreacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().IdTipoUsuario)
-        </th>
-        <th></th>
-    </tr>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().FechaCreacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Usuarios().IdTipoUsuario)
+            </th>
+            <th>Accion</th>
+        </tr>
+    </thead>
 
     @foreach (var item in Model.usuarioList)
     {
@@ -79,17 +74,14 @@
                 @Html.DisplayFor(modelItem => item.IdTipoUsuario)
             </td>
             <td>
-                @*@Html.ActionLink("Edit", "Editar", new { IdUsuario = item.IdUsuario }) |
-                    @Html.ActionLink("Delete", "Eliminar", new { /* id=item.PrimaryKey */ })*@
 
-                <a href="@Url.Action("Editar","Usuarios",new { IdUsuario = item.IdUsuario})">Editar  </a>
+                <a href="@Url.Action("Editar","Productos",new { IdUsuario = item.IdUsuario})"> <i class="bi bi-pencil btnVerde"></i> </a>&nbsp;
+                <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarUsuario(@item.IdUsuario)"><i class="bi bi-trash3 btnRojo"></i></a>
 
 
             </td>
 
-            <td>
-                <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarUsuario(@item.IdUsuario)">Eliminar</a>
-            </td>
+
         </tr>
     }
 
@@ -121,19 +113,27 @@
 </div>
 
 
+
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.jqueryui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap.min.js"></script>
+
 <script type="text/javascript">
 
 
     function EliminarUsuario(Id) {
 
-        $('#IdUsuario').val(Id) ;
+        $('#IdUsuario').val(Id);
     }
 
     $("#eliminarBtn").on('click', function () {
 
-       
+
 
         $.ajax({
             url: '/Usuarios/Eliminar',
@@ -142,13 +142,12 @@
             data: '{"IdUsuario":' + $('#IdUsuario').val() + '}',
             success: function (data) {
 
-                console.log(data);
-                alert('Se elimino');
+
                 $('#ModalEliminar').modal('hide');
 
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                
+
                 console.log(errorThrown);
             },
             complete: function () {
@@ -158,5 +157,22 @@
         })
 
     })
+
+
+    $(document).ready(function () {
+        $.noConflict();
+        $('#tablaUsuarios').DataTable({
+            info: false,
+            paging: false,
+            responsive: true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            },
+            "oLanguage": {
+                "sEmptyTable": "No hay datos disponibles para mostrar"
+            }
+        });
+    });
+
 
 </script>

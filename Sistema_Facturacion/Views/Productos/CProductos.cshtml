@@ -1,0 +1,174 @@
+﻿@model Sistema_Facturacion.Models.ViewModel.Producto.CProductoViewModel
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Consulta Productos";
+}
+
+
+<h2 class="text-center header">Consulta de Productos</h2>
+
+
+
+
+<table class="table table-striped nowrap table-responsive" id="tablaProductos" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Productos().IdCategoriaProducto)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Productos().IdProveedor)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Productos().Codigo)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Productos().Descripcion)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Productos().TieneImpuesto)
+            </th>
+
+            <th>
+                Accion
+            </th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model.productoList)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCategoriaProducto)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.IdProveedor)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.TieneImpuesto)
+            </td>
+
+
+            <td>
+
+                <a href="@Url.Action("Editar","Productos",new { IdProducto = item.IdProducto})"> <i class="bi bi-pencil btnVerde"></i> </a>&nbsp;
+                <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarProducto(@item.IdProducto)"><i class="bi bi-trash3 btnRojo"></i></a>
+
+            </td>
+
+
+        </tr>
+    }
+
+</table>
+
+
+<!--Modal-->
+
+<div class="modal fade  text-center" id="ModalEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">Seguro que desea borrar el Producto?</h5>
+                <input id="IdProducto" hidden />
+            </div>
+            <form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" id="eliminarBtn" class="btn btn-secondary">Si</button>
+                 
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.jqueryui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+
+    function EliminarProducto(Id) {
+
+        $('#IdProducto').val(Id);
+    }
+
+    $("#eliminarBtn").on('click', function () {
+
+        $.ajax({
+            url: '/Productos/Eliminar',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: '{"IdProducto":' + $('#IdProducto').val() + '}',
+            success: function (data) {
+
+
+                $('#ModalEliminar').modal('hide');
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                console.log(errorThrown);
+            },
+            complete: function () {
+                window.location.href = '/Productos/CProductos/';
+            }
+
+        })
+
+    })
+
+
+    $(document).ready(function () {
+        $.noConflict();
+        $('#tablaProductos').DataTable({
+            info: false,
+            paging: false,
+            responsive: true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            },
+            "oLanguage": {
+                "sEmptyTable": "No hay datos disponibles para mostrar"
+            }
+        });
+    });
+
+
+</script>

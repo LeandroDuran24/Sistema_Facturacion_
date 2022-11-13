@@ -1,0 +1,150 @@
+﻿@model Sistema_Facturacion.Models.ViewModel.CategoriaProducto.CCategoriaProductoViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Consulta de Categoria de Productos";
+}
+
+<style>
+
+    .ui-widget-header {
+        background-color: white;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 0;
+        border: 1px solid blue;
+    }
+</style>
+
+<h2 class="text-center header">Consulta de Categoria de Productos</h2>
+
+<table class="table table-striped nowrap table-responsive" id="tablaCategoria" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.CategoriaProductos().IdCategoria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.CategoriaProductos().Categoria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.CategoriaProductos().Descripcion)
+            </th>
+            <th>
+                Accion
+            </th>
+        </tr>
+    </thead>
+
+
+    @foreach (var item in Model.categoriaList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCategoria)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                <a href="@Url.Action("Editar","CategoriaProductos",new { IdCategoria = item.IdCategoria})"> <i class="bi bi-pencil btnVerde"></i> </a>&nbsp;
+                <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarCategoria(@item.IdCategoria)"><i class="bi bi-trash3 btnRojo"></i></a>
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<!--Modal Eliminar-->
+<div class="modal text-center" id="ModalEliminar" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                @*<h2 class="modal-title" id="exampleModalLabel"><strong style="color:white">Eliminar Usuario</strong></h2>*@
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-danger">Seguro que desea borrar la Categoria de Producto?</h5>
+                <input id="IdCategoria" hidden />
+            </div>
+            <form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" id="eliminarBtn" class="btn btn-secondary">Si</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+
+
+    function EliminarCategoria(Id) {
+
+        $('#IdCategoria').val(Id);
+    }
+
+    $("#eliminarBtn").on('click', function () {
+
+        $.ajax({
+            url: '/CategoriaProductos/Eliminar',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: '{"IdCategoria":' + $('#IdCategoria').val() + '}',
+            success: function (data) {
+                alert(data);
+
+                if (data) {
+
+                    toastr.success('Elimando con Exito...!');
+                }
+                else {
+                    toastr.error('Error al intentar Eliminar...');
+                }
+
+                $('#ModalEliminar').modal('hide');
+                window.location.href = '/CategoriaProductos/CCategoriaProductos';
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+
+                toastr.error('Se ha producido el siguient error-> ' + errorThrown);
+            }
+          
+
+        })
+
+    })
+
+
+    $(document).ready(function () {
+        $.noConflict();
+        $('#tablaCategoria').DataTable({
+            info: false,
+            paging: true,
+            responsive: true,
+            "bLengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }, "oLanguage": {
+                "sEmptyTable": "No hay datos disponibles para mostrar"
+            }
+        });
+    });
+
+
+</script>

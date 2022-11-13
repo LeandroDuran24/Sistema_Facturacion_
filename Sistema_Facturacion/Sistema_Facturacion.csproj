@@ -167,22 +167,25 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CategoriaProductosController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogInController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProductosController.cs" />
+    <Compile Include="Controllers\ProveedoresController.cs" />
+    <Compile Include="Controllers\RepresentantesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Controllers\VentasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CategoriaProductos.cs" />
     <Compile Include="Models\Clientes.cs" />
     <Compile Include="Models\ConexionDb.cs" />
+    <Compile Include="Models\DetalleVentas.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Inventario.cs" />
     <Compile Include="Models\Log.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Productos.cs" />
     <Compile Include="Models\Proveedores.cs" />
     <Compile Include="Models\Representantes.cs" />
@@ -190,7 +193,17 @@
     <Compile Include="Models\Usuarios.cs" />
     <Compile Include="Models\Utilidades.cs" />
     <Compile Include="Models\Ventas.cs" />
+    <Compile Include="Models\ViewModel\CategoriaProducto\CCategoriaProductoViewModel.cs" />
     <Compile Include="Models\ViewModel\Cliente\CClienteViewModel.cs" />
+    <Compile Include="Models\ViewModel\DetalleVentas.cs" />
+    <Compile Include="Models\ViewModel\Facturacion\MFacturacionViewModel.cs" />
+    <Compile Include="Models\ViewModel\Inventario\CInventarioViewModel.cs" />
+    <Compile Include="Models\ViewModel\Producto\MInventarioViewModel.cs" />
+    <Compile Include="Models\ViewModel\Producto\CProductoViewModel.cs" />
+    <Compile Include="Models\ViewModel\Producto\MProductoViewModel.cs" />
+    <Compile Include="Models\ViewModel\Proveedor\CProveedorViewModel.cs" />
+    <Compile Include="Models\ViewModel\Proveedor\MProveedorViewModel.cs" />
+    <Compile Include="Models\ViewModel\Representante\CRepresentantesViewModel.cs" />
     <Compile Include="Models\ViewModel\Usuario\CUsuarioViewModel.cs" />
     <Compile Include="Models\ViewModel\Usuario\LogInViewModel.cs" />
     <Compile Include="Models\ViewModel\Usuario\MUsuarioViewModel.cs" />
@@ -202,12 +215,23 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Css\Estilos.css" />
+    <Content Include="Content\Css\LogIn.css" />
+    <Content Include="Content\Images\cliente1.png" />
+    <Content Include="Content\Images\productos.png" />
+    <Content Include="Content\Images\proveedor.png" />
+    <Content Include="Content\Images\representante.png" />
+    <Content Include="Content\Images\usuario.png" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -219,6 +243,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Views\LogIn\Login.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -233,24 +260,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\LogIn\LogIn.cshtml" />
@@ -260,6 +269,22 @@
     <Content Include="Views\Clientes\MCliente.cshtml" />
     <Content Include="Views\Clientes\CClientes.cshtml" />
     <Content Include="Views\Clientes\Editar.cshtml" />
+    <Content Include="Views\Proveedores\MProveedor.cshtml" />
+    <Content Include="Views\Proveedores\CProveedores.cshtml" />
+    <Content Include="Views\Proveedores\Editar.cshtml" />
+    <Content Include="Views\Productos\MProducto.cshtml" />
+    <Content Include="Views\Productos\Editar.cshtml" />
+    <Content Include="Views\Productos\CProductos.cshtml" />
+    <Content Include="Views\CategoriaProductos\MCategoriaProducto.cshtml" />
+    <Content Include="Views\CategoriaProductos\CCategoriaProductos.cshtml" />
+    <Content Include="Views\CategoriaProductos\Editar.cshtml" />
+    <Content Include="Views\Inventario\MInventario.cshtml" />
+    <Content Include="Views\Productos\Inventario.cshtml" />
+    <Content Include="Views\Productos\CInventario.cshtml" />
+    <Content Include="Views\Representantes\MRepresentante.cshtml" />
+    <Content Include="Views\Representantes\CRepresentantes.cshtml" />
+    <Content Include="Views\Representantes\Editar.cshtml" />
+    <Content Include="Views\Ventas\Facturacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -291,16 +316,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54113</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54113/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

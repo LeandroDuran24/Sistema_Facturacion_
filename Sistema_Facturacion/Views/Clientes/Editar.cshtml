@@ -1,81 +1,162 @@
 ﻿@model Sistema_Facturacion.Models.Clientes
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Editar Cliente";
 }
 
 
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Editar Clientes</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-       
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-            </div>
-        </div>
+<div class="row">
+    <div class="col-md-12">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Celular, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Celular, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Celular, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <div class="form-horizontal">
+            <fieldset>
+                <legend class="text-center header">Mantenimiento de Clientes</legend>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+
+                <div class="col-md-5 col-sm-4 col-lg-4">
+
+
+                    <img data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-perspective="500" src="~/Content/Images/cliente1.png" class="js-tilt imgResponsive" height="300" width="300">
+
+
+                </div>
+
+                <div class=" col-sm-6 col-md-5 col-lg-6 col-sm-offset-1 col-md-offset-1 col-lg-offset-2">
+
+
+                    <div class="form-group" style="display:none">
+
+                        @Html.EditorFor(model => model.IdCliente, new { htmlAttributes = new { @id = "idCliente", @class = "form-control" } })
+                        
+                    </div>
+
+
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @id = "nombre", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @id = "apellidos", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+
+
+                        @Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @id = "cedula", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @id = "direccion", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @id = "telefono", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.Celular, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.Celular, new { htmlAttributes = new { @id = "celular", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Celular, "", new { @class = "text-danger" })
+
+                    </div>
+
+
+
+                    <div class="text-center">
+
+                        <button type="button" id="btnEditar" class="btn btn-primary "> <span class=" bi bi-save"></span> Editar</button>
+                    </div>
+                </div>
+
+            </fieldset>
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "CClientes")
 </div>
+        }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+
+<script type="text/javascript">
+
+
+    $('#btnEditar').on('click', function () {
+
+        var idCliente = $('#idCliente').val();
+        var nombre = $('#nombre').val();
+        var apellidos = $('#apellidos').val();
+        var cedula = $('#cedula').val();
+        var direccion = $('#direccion').val();
+        var telefono = $('#telefono').val();
+        var celular = $('#celular').val();
+
+
+
+        $.ajax({
+            url: '/Clientes/Editar',
+            type: 'POST',
+            data: { Id: idCliente, Nombre: nombre, Apellidos: apellidos, Cedula: cedula, Direccion: direccion, Telefono: telefono, Celular: celular },
+            success: function (result) {
+
+
+                if (result)
+                    toastr.success('Guardado con Exito...!');
+                else
+                    toastr.error('Error al intentar Guardar...');
+
+
+                $('#nombre').val('');
+                $('#apellidos').val('');
+                $('#cedula').val('');
+                $('#direccion').val('');
+                $('#telefono').val('');
+                $('#celular').val('');
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+
+                toastr.error('Se ha producido el siguient error-> ' + errorThrown);
+            }
+        });
+
+
+    })
+
+
+
+</script>

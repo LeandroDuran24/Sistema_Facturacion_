@@ -1,0 +1,100 @@
+﻿@model Sistema_Facturacion.Models.Representantes
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Mantenimiento de Representante";
+}
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="form-horizontal">
+                <fieldset>
+                    <legend class="text-center header">Mantenimiento de Representante</legend>
+
+
+                    <div class="col-md-5 col-sm-4 col-lg-4">
+
+                        <img data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-perspective="500" src="~/Content/Images/representante.png" class="js-tilt imgResponsive" height="300" width="300">
+
+                    </div>
+
+
+                    <div class="col-sm-6 col-md-5 col-lg-6 col-sm-offset-1 col-md-offset-1 col-lg-offset-2">
+
+
+                        <div class="form-group">
+
+
+                            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Celular, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Celular, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Celular, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="text-center">
+
+                            <button type="submit" class="btn btn-primary "> <span class=" bi bi-save"></span> Guardar</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+
+
+
+
+

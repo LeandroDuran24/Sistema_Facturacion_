@@ -1,100 +1,91 @@
 ﻿@model Sistema_Facturacion.Models.ViewModel.Cliente.CClienteViewModel
 
 @{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Consulta de Clientes";
 }
 
 
+<style>
 
-<h2>CClientes</h2>
-
-<p>
-    @Html.ActionLink("Create New", "MCliente")
-</p>
-
-
-@using (Html.BeginForm())
-{
-
-    <div class="input-group FlexWrapNoneBotonBuscar">
-        @Html.EnumDropDownListFor(model => model.criterioBusqueda, new { @class = " " })
-        <input id="stringBusqueda" name="stringBusqueda" type="text" class="inputConsultaFiltro " placeholder="Texto de Busqueda" autocomplete="off" />
-        <span class="input-group-append">
-            <button type="submit" id="btnBuscar" class="btn btn-danger"><i class="fa fa-search botonBuscar"></i>Buscar</button>
-        </span>
-    </div>
-}
-
-
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Nombre)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Apellidos)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Cedula)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Direccion)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Telefono)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Celular)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model.clienteList)
-    {
-        <tr>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellidos)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Cedula)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Cedula)
-            </td>
-            <td>
-                @*@Html.ActionLink("Edit", "Editar", new { IdUsuario = item.IdUsuario }) |
-                    @Html.ActionLink("Delete", "Eliminar", new { /* id=item.PrimaryKey */ })*@
-
-                <a href="@Url.Action("Editar","Clientes",new { IdCliente = item.IdCliente})">Editar  </a>
-
-
-            </td>
-
-            <td>
-                <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarCliente(@item.IdCliente)">Eliminar</a>
-            </td>
-        </tr>
+    .ui-widget-header {
+        background-color: white;
     }
+</style>
+
+
+<h2 class="text-center header">Consulta de Clientes</h2>
+
+
+
+<table class="table table-striped nowrap table-responsive" id="tablaClientes" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Nombre)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Apellidos)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Cedula)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Direccion)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => new Sistema_Facturacion.Models.Clientes().Celular)
+            </th>
+            <th>
+                Accion
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.clienteList)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cedula)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Direccion)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Celular)
+                </td>
+                <td>
+                    <a href="@Url.Action("Editar","Clientes",new { IdCliente = item.IdCliente})"><i class="bi bi-pencil btnVerde"></i>  </a> &nbsp;
+
+                    <a href="#" data-target="#ModalEliminar" data-toggle="modal" onclick="EliminarCliente(@item.IdCliente)"><i class="bi bi-trash3 btnRojo"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
 
 </table>
 
@@ -110,6 +101,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+
+
             </div>
             <div class="modal-body">
                 <h5 class="text-danger">Seguro que desea borrar el Cliente?</h5>
@@ -127,10 +120,16 @@
 </div>
 
 
-
-
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.jqueryui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap.min.js"></script>
+
+
 <script type="text/javascript">
 
 
@@ -147,22 +146,44 @@
             contentType: "application/json; charset=utf-8",
             data: '{"IdCliente":' + $('#IdCliente').val() + '}',
             success: function (data) {
+                if (data) {
 
-                console.log(data);
-                alert('Se elimino');
+                    toastr.success('Elimando con Exito...!');
+                }
+                else {
+                    toastr.error('Error al intentar Eliminar...');
+                }
+
                 $('#ModalEliminar').modal('hide');
+
+                window.location.href = '/Clientes/CClientes/';
 
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
 
-                console.log(errorThrown);
-            },
-            complete: function () {
-                window.location.href = '/Clientes/CClientes/';
+
+                toastr.error('Se ha producido el siguient error-> ' + errorThrown);
             }
 
         })
 
     })
+
+
+    $(document).ready(function () {
+        $.noConflict();
+        $('#tablaClientes').DataTable({
+            info: false,
+            paging: true,
+            responsive: true,
+            "bLengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            },
+            "oLanguage": {
+                "sEmptyTable": "No hay datos disponibles para mostrar"
+            }
+        });
+    });
 
 </script>

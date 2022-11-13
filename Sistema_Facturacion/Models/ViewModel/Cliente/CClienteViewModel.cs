@@ -10,7 +10,6 @@ namespace Sistema_Facturacion.Models.ViewModel.Cliente
     {
 
         public List<Clientes> clienteList { get; set; } //lista para almcenar los usuarios
-        public CriterioBusquedaClientes criterioBusqueda { get; set; }
-        public string stringBusqueda { get; set; } = string.Empty;
+     
     }
 }
